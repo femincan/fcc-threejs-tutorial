@@ -1,5 +1,5 @@
 import * as t from 'three';
-import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { ArcballControls } from 'three/addons/controls/ArcballControls.js';
 
 import './style.css';
 
@@ -18,11 +18,10 @@ const far = 10;
 const camera = new t.PerspectiveCamera(fov, aspectRatio, near, far);
 camera.position.z = 2;
 
-const controls = new OrbitControls(camera, renderer.domElement);
-controls.enableDamping = true;
-controls.dampingFactor = 0.02;
-
 const scene = new t.Scene();
+
+const controls = new ArcballControls(camera, renderer.domElement);
+controls.dampingFactor = 5;
 
 const geo = new t.IcosahedronGeometry(1.0, 2);
 const mat = new t.MeshStandardMaterial({
@@ -41,7 +40,6 @@ const hemiLight = new t.HemisphereLight(0x0012ff, 0xaa3500);
 scene.add(hemiLight);
 
 function animate(t = 0) {
-  mesh.rotation.y = t * 0.0001;
   renderer.render(scene, camera);
   controls.update();
 
