@@ -39,7 +39,7 @@ mesh.add(wireMesh);
 const hemiLight = new t.HemisphereLight(0x0012ff, 0xaa3500);
 scene.add(hemiLight);
 
-function animate(t = 0) {
+function animate() {
   renderer.render(scene, camera);
   controls.update();
 
