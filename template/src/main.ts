@@ -1,4 +1,4 @@
 import * as t from 'three';
-import './styles.css';
+import './style.css';
 
 console.log("Let's get started..");
