@@ -1,6 +1,7 @@
 import * as t from 'three';
 import './style.css';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { getFresnelMat } from './utils';
 
 const w = window.innerWidth;
 const h = window.innerHeight;
@@ -24,6 +25,7 @@ renderer.setSize(w, h);
 document.body.appendChild(renderer.domElement);
 
 const controls = new OrbitControls(camera, renderer.domElement);
+controls.rotateSpeed = 0.5;
 controls.enableDamping = true;
 
 const earthGroup = new t.Group();
@@ -46,6 +48,21 @@ const nightMat = new t.MeshBasicMaterial({
 const nightMesh = new t.Mesh(geometry, nightMat);
 earthGroup.add(nightMesh);
 
+const cloudsMat = new t.MeshStandardMaterial({
+  map: loader.load('/earth-clouds-map.jpg'),
+  transparent: true,
+  opacity: 0.5,
+  blending: t.AdditiveBlending,
+});
+const cloudsMesh = new t.Mesh(geometry, cloudsMat);
+cloudsMesh.scale.setScalar(1.003);
+scene.add(cloudsMesh);
+
+const fresnelMat = getFresnelMat();
+const fresnelMesh = new t.Mesh(geometry, fresnelMat);
+fresnelMesh.scale.setScalar(1.01);
+earthGroup.add(fresnelMesh);
+
 const sunLight = new t.DirectionalLight(0xffffff);
 sunLight.position.set(-2, 0.5, 1);
 scene.add(sunLight);
@@ -55,7 +72,8 @@ function animate() {
 
   controls.update();
 
-  earthGroup.rotation.y += 0.002;
+  earthGroup.rotation.y += 0.0015;
+  cloudsMesh.rotation.y += 0.002;
 }
 
 renderer.setAnimationLoop(animate);
